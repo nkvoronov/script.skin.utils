@@ -1,0 +1,125 @@
+# Kodi language file
+# Addon Name: Skin Helper Service
+# Addon id: script.skin.helper.service
+# Addon Provider: marcelveldt, YLLOW_DRAGON
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"Language: uk_UA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#32000"
+msgid "Custom Image"
+msgstr "Зображення користувача"
+
+msgctxt "#32001"
+msgid "None"
+msgstr "Нема"
+
+msgctxt "#32002"
+msgid "Background overlay texture"
+msgstr "Фон накладення текстури"
+
+msgctxt "#32003"
+msgid "Browse custom image for background overlay"
+msgstr "Перегляд зображення користувача для фону накладення"
+
+msgctxt "#32004"
+msgid "Custom single image"
+msgstr "Одне зображення користувача"
+
+msgctxt "#32005"
+msgid "Custom multi image (folder)"
+msgstr "Кілька зображеннь користувача (папка)"
+
+msgctxt "#32006"
+msgid "Select busy spinner"
+msgstr "Вибрати індикатор зайнятості"
+
+msgctxt "#32007"
+msgid "%s missing!"
+msgstr "%s відсутня!"
+
+msgctxt "#32008"
+msgid "To get the most out of this skin, it is suggested to install a image resource addon for %s. \n Do you want to select and install this image resource addon now ?"
+msgstr "Для того, щоб отримати максимальну віддачу від цієї обкладинки, рекомендується встановити додаток ресурсу зображень для %s. \n Ви хочете, щоб вибрати і встановити це додаток ресурсу зображень зараз?"
+
+msgctxt "#32009"
+msgid "Custom path"
+msgstr "Шлях користувача"
+
+msgctxt "#32010"
+msgid "Select resource addon or custom folder"
+msgstr "Вибрати додаток ресурсу або папку користувача"
+
+msgctxt "#32011"
+msgid "Not installed"
+msgstr "Не встановлений"
+
+msgctxt "#32012"
+msgid "Select view"
+msgstr "Вибрати вид"
+
+msgctxt "#32013"
+msgid "Enable/disable views"
+msgstr "Дозволити/Заборонити види"
+
+msgctxt "#32014"
+msgid "The action completed sucesfully"
+msgstr "Дія успішна"
+
+msgctxt "#32015"
+msgid "The action completed with errors"
+msgstr "Дія завершено з помилками"
+
+msgctxt "#32016"
+msgid "Do you want to setup a single background or a folder with multiple backgrounds ?"
+msgstr "Ви хочете налаштувати один фон або папку з декількома фонами?"
+
+msgctxt "#32017"
+msgid "Single"
+msgstr "Одне"
+
+msgctxt "#32018"
+msgid "Multiple"
+msgstr "Кілька"
+
+msgctxt "#32019"
+msgid "Random fanart from movie with genre"
+msgstr "Випадкові фанарт з фільму с жанром"
+
+msgctxt "#32020"
+msgid "Select image"
+msgstr "Вибрати зображення"
+
+msgctxt "#32021"
+msgid "Available image resource addons"
+msgstr "Доступні доповнення ресурсів зображень"
+
+msgctxt "#32022"
+msgid "There are no (more) resource addons available for this type"
+msgstr "Там нема (більше) доповнень ресурсів, доступних для даного типу"
+
+msgctxt "#32023"
+msgid "Artwork options"
+msgstr "Параметри ілюстрацій"
+
+msgctxt "#32024"
+msgid "Select Animated Art"
+msgstr "Вибрати анімовану ілюстрацію"
+
+msgctxt "#32025"
+msgid "Use submenu as widget"
+msgstr "Використовувати підміню як віджет"
+
+msgctxt "#32026"
+msgid "RCB Most played games"
+msgstr "RCB найпопулярніші ігри"
