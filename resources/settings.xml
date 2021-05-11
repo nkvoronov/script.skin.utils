@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="32015">
+		<setting id="backup_path" type="folder" option="writeable" source="files" label="32016" default="special://profile/addon_data/script.skin.helper.skinbackup/" />
+	</category>
+</settings>

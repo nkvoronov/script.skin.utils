@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os
+import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
@@ -9,11 +10,13 @@ import xbmcaddon
 import urllib.parse
 from xml.dom.minidom import parse
 from operator import itemgetter
+
+from .utils import log_msg, KODI_VERSION, kodi_json, clean_string, getCondVisibility
+from .utils import log_exception, get_current_content_type, ADDON_ID, recursive_delete_dir, try_decode
 from .skinsettings import SkinSettings
 from .backuprestore import BackupRestore
 from .dialogselect import DialogSelect
-from resources.lib.utils import log_msg, KODI_VERSION, kodi_json, clean_string, getCondVisibility
-from resources.lib.utils import log_exception, get_current_content_type, ADDON_ID, recursive_delete_dir, try_decode
+from .colorpicker import ColorPicker
 
 class MainModule:
 
@@ -112,6 +115,12 @@ class MainModule:
                 listitem.setProperty('Addon.Summary', summary)
                 listitems.append(listitem)
         return listitems
+
+    @staticmethod
+    def wait_for_skinshortcuts_window():
+        while not xbmc.Monitor().abortRequested() and not xbmc.getCondVisibility('Window.IsActive(DialogSelect.xml) | \
+                Window.IsActive(script-skin_helper_service-ColorPicker.xml) | Window.IsActive(DialogKeyboard.xml)'):
+            xbmc.Monitor().waitForAbort(0.1)
 
     # -- ACTION --
     
@@ -213,7 +222,7 @@ class MainModule:
         self.params['resourceaddon'] = 'resource.images.busyspinners'
         self.params['customfolder'] = 'special://skin/extras/busy_spinners/'
         self.params['allowmulti'] = 'true'
-        self.params['header'] = self.addon.getLocalizedString(32006)
+        self.params['header'] = self.addon.getLocalizedString(32017)
         self.selectimage()
         
     def selectchannel(self):
@@ -226,23 +235,66 @@ class MainModule:
         log_msg('playchannel')
         
     def selectcolor(self):
-        log_msg('selectcolor')
+        if self.params:
+            colorpicker = ColorPicker('script-script_skin_utils-ColorPicker.xml', xbmcaddon.Addon(ADDON_ID).getAddonInfo('path'), 'Default', '1080i')
+            colorpicker.skinstring = self.params.get('skinstring','')
+            colorpicker.win_property = self.params.get('winproperty','')
+            colorpicker.active_palette = self.params.get('palette','')
+            colorpicker.header_label = self.params.get('header','')
+            propname = self.params.get('shortcutproperty','')
+            colorpicker.shortcut_property = propname
+            colorpicker.doModal()
+            #special action when we want to set our chosen color into a skinshortcuts property
+            if propname and not isinstance(colorpicker.result, int):
+                self.wait_for_skinshortcuts_window()
+                xbmc.sleep(400)
+                currentwindow = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
+                currentwindow.setProperty('customProperty', propname)
+                currentwindow.setProperty('customValue',color_picker.result[0])
+                xbmc.executebuiltin('SendClick(404)')
+                xbmc.sleep(250)
+                current_window.setProperty('customProperty', '%s.name' %propname)
+                current_window.setProperty('customValue',color_picker.result[1])
+                xbmc.executebuiltin('SendClick(404)')
+            log_msg('selectcolor')
+            del colorpicker
         
     def reset(self):
         backuprestore = BackupRestore()
-        backuprestore.reset()
-        log_msg('reset')        
-        del backuprestore
+        filters = self.params.get('filter', [])
+        if filters:
+            filters = filters.split('|')
+        silent = self.params.get('silent', '') == 'true'
+        backuprestore.reset(filters, silent)
+        log_msg('reset')
+        xbmc.Monitor().waitForAbort(2)
         
     def backup(self):
         backuprestore = BackupRestore()
-        backuprestore.backup()
+        filters = self.params.get('filter', [])
+        if filters:
+            filters = filters.split('|')
+        silent = self.params.get('silent', '')
+        promptfilename = self.params.get('promptfilename', '') == 'true'
+        if silent:
+            silent_backup = True
+            backup_file = silent
+        else:
+            silent_backup = False
+            backup_file = backuprestore.get_backupfilename(promptfilename)
+        backuprestore.backup(filters, backup_file, silent_backup)
         log_msg('backup')
         del backuprestore
         
     def restore(self):
         backuprestore = BackupRestore()
-        backuprestore.restore()
+        silent = self.params.get('silent', '')
+        if silent and not xbmcvfs.exists(silent):
+            log_msg(
+                'ERROR while restoring backup ! --> Filename invalid.'
+                'Make sure you provide the FULL path, for example special://skin/extras/mybackup.zip',
+                xbmc.LOGERROR)
+            return
+        backuprestore.restore(silent)
         log_msg('restore')
-        del backuprestore
-    
+

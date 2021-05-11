@@ -1,32 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os
+import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from resources.lib.dialogselect import DialogSelect
-from resources.lib.utils import log_msg, ADDON_ID, get_skin_name, ADDON_DATA, copy_file, delete_file
-from resources.lib.utils import recursive_delete_dir, get_clean_image, normalize_string
-from resources.lib.utils import zip_tofile, unzip_fromfile, try_encode, try_decode
 from xml.dom.minidom import parse
 from datetime import datetime
 
+from .utils import log_msg, ADDON_ID, get_skin_name, ADDON_DATA, copy_file, delete_file
+from .utils import recursive_delete_dir, get_clean_image, normalize_string
+from .utils import zip_tofile, unzip_fromfile, try_encode, try_decode
+from .dialogselect import DialogSelect
 
 class BackupRestore:
     params = {}
 
     def __init__(self):
-        '''Initialization and main code run'''
         self.addon = xbmcaddon.Addon(ADDON_ID)
 
     def __del__(self):
-        '''Cleanup Kodi Cpython instances on exit'''
         del self.addon
 
     def backup(self, filters=None, backup_file="", silent=False):
-        '''create skin backup'''
         if not filters:
             filters = []
 
@@ -60,7 +58,7 @@ class BackupRestore:
 
         # show success message
         if not silent:
-            xbmcgui.Dialog().ok(self.addon.getLocalizedString(32004), self.addon.getLocalizedString(32005))
+            xbmcgui.Dialog().ok(self.addon.getLocalizedString(32000), self.addon.getLocalizedString(32001))
 
     def restore(self, filename="", silent=False):
 
@@ -69,8 +67,8 @@ class BackupRestore:
 
         progressdialog = None
         if not silent:
-            progressdialog = xbmcgui.DialogProgress(self.addon.getLocalizedString(32006))
-            progressdialog.create(self.addon.getLocalizedString(32007))
+            progressdialog = xbmcgui.DialogProgress(self.addon.getLocalizedString(32002))
+            progressdialog.create(self.addon.getLocalizedString(32003))
 
         if filename and xbmcvfs.exists(filename):
             # create temp path
@@ -105,13 +103,13 @@ class BackupRestore:
             recursive_delete_dir(temp_path)
             progressdialog.close()
         if not silent:
-            xbmcgui.Dialog().ok(self.addon.getLocalizedString(32006), self.addon.getLocalizedString(32009))
+            xbmcgui.Dialog().ok(self.addon.getLocalizedString(32002), self.addon.getLocalizedString(32004))
 
     def backuprestore(self):
         listitems = []
 
         # create backup option
-        label = self.addon.getLocalizedString(32013)
+        label = self.addon.getLocalizedString(32005)
         listitem = xbmcgui.ListItem(label=label)
         listitem.setArt({'icon': "DefaultFolder.png"})
         listitem.setPath("backup")
@@ -123,15 +121,15 @@ class BackupRestore:
             for backupfile in xbmcvfs.listdir(backuppath)[1]:
                 backupfile = backupfile
                 if "Skinbackup" in backupfile and backupfile.endswith(".zip"):
-                    label = "%s: %s" % (self.addon.getLocalizedString(32015), backupfile)
+                    label = "%s: %s" % (self.addon.getLocalizedString(32006), backupfile)
                     listitem = xbmcgui.ListItem(label=label)
                     listitem.setArt({'icon': "DefaultFile.png"})
                     listitem.setPath(backuppath + backupfile)
                     listitems.append(listitem)
 
         # show dialog and list options
-        header = self.addon.getLocalizedString(32016)
-        extrabutton = self.addon.getLocalizedString(32012)
+        header = self.addon.getLocalizedString(32007)
+        extrabutton = self.addon.getLocalizedString(32008)
         dialog = DialogSelect("DialogSelect.xml", "", windowtitle=header,
                               extrabutton=extrabutton, richlayout=True, listing=listitems)
         dialog.doModal()
@@ -255,7 +253,7 @@ class BackupRestore:
     def get_backuppath(self):
         backuppath = self.addon.getSetting("backup_path")
         if not backuppath:
-            backuppath = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32002),
+            backuppath = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32009),
                                                  'files')
             self.addon.setSetting("backup_path", backuppath.encode)
         return backuppath
@@ -265,7 +263,7 @@ class BackupRestore:
                 get_skin_name().capitalize(),
                 datetime.now().strftime('%Y-%m-%d %H.%M.%S'))
         if promptfilename:
-            header = self.addon.getLocalizedString(32003)
+            header = self.addon.getLocalizedString(32010)
             backupfile = xbmcgui.Dialog().input(header, backupfile).decode
         backupfile += ".zip"
         return self.get_backuppath() + backupfile
@@ -283,7 +281,7 @@ class BackupRestore:
         return temp_path
 
     def get_restorefilename(self):
-        filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32008),
+        filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32011),
                                        'files')
         filename = filename.replace("//", "") # possible fix for strange path issue on atv/ftv ?
         return filename
@@ -332,7 +330,7 @@ class BackupRestore:
 
             if progressdialog:
                 progressdialog.update((count * 100) // len(importstring),
-                                      '%s %s' % (self.addon.getLocalizedString(32033), setting))
+                                      '%s %s' % (self.addon.getLocalizedString(32012), setting))
 
             if skinsetting[0] == "string":
                 if settingvalue:
@@ -364,8 +362,8 @@ class BackupRestore:
     def reset(self, filters=None, silent=False):
         log_msg("filters: %s" % filters)
         if silent or (not silent and
-                      xbmcgui.Dialog().yesno(heading=self.addon.getLocalizedString(32010),
-                                             message=self.addon.getLocalizedString(32011))):
+                      xbmcgui.Dialog().yesno(heading=self.addon.getLocalizedString(32013),
+                                             message=self.addon.getLocalizedString(32014))):
             if filters:
                 # only restore specific settings
                 skinsettings = self.get_skinsettings(filters)

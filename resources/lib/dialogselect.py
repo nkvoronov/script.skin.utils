@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os
+import sys
 import xbmcgui
 import xbmc
-from resources.lib.utils import getCondVisibility, try_decode
 
+from .utils import getCondVisibility, try_decode
 
 class DialogSelect(xbmcgui.WindowXMLDialog):
 

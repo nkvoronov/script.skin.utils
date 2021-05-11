@@ -1,15 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os
+import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-import urllib.request, urllib.error, urllib.parse
-from resources.lib.utils import KODI_VERSION, ADDON_ID, log_exception, kodi_json, getCondVisibility, try_decode
-from resources.lib.dialogselect import DialogSelect
 import re
+import urllib.request, urllib.error, urllib.parse
+
+from .utils import KODI_VERSION, ADDON_ID, log_exception, kodi_json, getCondVisibility, try_decode
+from .dialogselect import DialogSelect
 
 def setresourceaddon(addontype, skinstring="", header=""):
     xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -17,16 +19,16 @@ def setresourceaddon(addontype, skinstring="", header=""):
     listing = []
     addon = xbmcaddon.Addon(ADDON_ID)
     if not header:
-        header = addon.getLocalizedString(32010)
+        header = addon.getLocalizedString(32018)
 
     # none option
-    listitem = xbmcgui.ListItem(label=addon.getLocalizedString(32001))
+    listitem = xbmcgui.ListItem(label=addon.getLocalizedString(32019))
     listitem.setArt({"icon": 'DefaultAddonNone.png'})
     listitem.setProperty("addonid", "none")
     listing.append(listitem)
 
     # custom path
-    listitem = xbmcgui.ListItem(label=addon.getLocalizedString(32009))
+    listitem = xbmcgui.ListItem(label=addon.getLocalizedString(32020))
     listitem.setArt({"icon": 'DefaultFolder.png'})
     listitem.setProperty("addonid", "custom")
     listing.append(listitem)
@@ -39,15 +41,6 @@ def setresourceaddon(addontype, skinstring="", header=""):
         listitem.setPath(item["path"])
         listitem.setProperty("addonid", item["addonid"])
         listing.append(listitem)
-
-    # special skinhelper paths
-    # if addontype == "resource.images.moviegenrefanart":
-        # label = addon.getLocalizedString(32019)
-        # listitem = xbmcgui.ListItem(label=label, label2="Skin Helper Service")
-        # listitem.setArt({"icon": 'special://home/addons/script.skin.helper.service/icon.png'})
-        # listitem.setPath("plugin://script.skin.helper.service/?action=moviegenrebackground&genre=")
-        # listitem.setProperty("addonid", "skinhelper.forgenre")
-        # listing.append(listitem)
 
     # show select dialog with choices
     dialog = DialogSelect("DialogSelect.xml", "", listing=listing, windowtitle=header,
@@ -76,7 +69,7 @@ def setresourceaddon(addontype, skinstring="", header=""):
             if addon_id == "custom":
                 # custom path
                 dialog = xbmcgui.Dialog()
-                custom_path = dialog.browse(0, addon.getLocalizedString(32005), 'files')
+                custom_path = dialog.browse(0, addon.getLocalizedString(32021), 'files')
                 del dialog
                 result.setPath(custom_path)
             addonpath = result.getLabel()
@@ -93,7 +86,6 @@ def setresourceaddon(addontype, skinstring="", header=""):
                     xbmc.executebuiltin('Skin.Reset(%s.multi)' % skinstring)
     del addon
 
-
 def downloadresourceaddons(addontype):
     xbmc.executebuiltin("ActivateWindow(busydialog)")
     listitems = []
@@ -109,12 +101,12 @@ def downloadresourceaddons(addontype):
     # if no addons available show OK dialog..
     if not listitems:
         dialog = xbmcgui.Dialog()
-        dialog.ok(addon.getLocalizedString(32021), addon.getLocalizedString(32022))
+        dialog.ok(addon.getLocalizedString(32022), addon.getLocalizedString(32023))
         del dialog
     else:
         # show select dialog with choices
         dialog = DialogSelect("DialogSelect.xml", "", listing=listitems,
-                              windowtitle=addon.getLocalizedString(32021), richlayout=True)
+                              windowtitle=addon.getLocalizedString(32022), richlayout=True)
         dialog.doModal()
         result = dialog.result
         del dialog
@@ -138,7 +130,6 @@ def downloadresourceaddons(addontype):
                 return True
     return False
 
-
 def checkresourceaddons(addonslist):
     addon = xbmcaddon.Addon(ADDON_ID)
     for item in addonslist:
@@ -152,14 +143,13 @@ def checkresourceaddons(addonslist):
             # skin setting is empty or filled with non existing addon...
             if not checkresourceaddon(setting, addontype):
                 ret = xbmcgui.Dialog().yesno(
-                    heading=addon.getLocalizedString(32007) % addontypelabel,
-                    message=addon.getLocalizedString(32008) % addontypelabel)
+                    heading=addon.getLocalizedString(32024) % addontypelabel,
+                    message=addon.getLocalizedString(32025) % addontypelabel)
                 xbmc.executebuiltin("Skin.Reset(%s.path)" % setting)
                 if ret:
                     downloadresourceaddons(addontype)
                     checkresourceaddon(setting, addontype)
     del addon
-
 
 def checkresourceaddon(skinstring="", addontype=""):
     if not addontype:
@@ -179,7 +169,6 @@ def checkresourceaddon(skinstring="", addontype=""):
             return True
     return False
 
-
 def get_resourceaddons(filterstr=""):
     result = []
     params = {"type": "kodi.resource.images",
@@ -190,7 +179,6 @@ def get_resourceaddons(filterstr=""):
             result.append(item)
 
     return result
-
 
 def get_multi_extension(filepath):
     is_multi = False
@@ -203,7 +191,6 @@ def get_multi_extension(filepath):
             extension = "." + item.split(".")[-1]
             break
     return (is_multi, extension)
-
 
 def get_repo_resourceaddons(filterstr=""):
     result = []
@@ -218,7 +205,6 @@ def get_repo_resourceaddons(filterstr=""):
             result.append(addoninfo)
     simplecache.close()
     return result
-
 
 def get_repo_addoninfo(addonid, simplecache=None):
     if simplecache:
@@ -263,7 +249,6 @@ def get_repo_addoninfo(addonid, simplecache=None):
             cache.set(cachestr, info)
     return info
 
-
 def get_resourceimages(addontype, recursive=False):
     images = []
     for addon in get_resourceaddons(addontype):
@@ -272,7 +257,6 @@ def get_resourceimages(addontype, recursive=False):
             addonpath = "special://home/addons/%s/resources/" % addon["addonid"]
         images += walk_directory(addonpath, recursive, addon["name"])
     return images
-
 
 def walk_directory(browsedir, recursive=False, label2=""):
     images = []

@@ -1,6 +1,6 @@
 # Kodi language file
-# Addon Name: Skin Helper Service
-# Addon id: script.skin.helper.service
+# Addon Name: Skin Helper Utils
+# Addon id: script.skin.utils
 # Addon Provider: marcelveldt, YLLOW_DRAGON
 msgid ""
 msgstr ""
@@ -17,109 +17,133 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#32000"
-msgid "Custom Image"
+msgid "Backup the skin settings"
 msgstr ""
 
 msgctxt "#32001"
-msgid "None"
+msgid "Backupfile was succesfully created!"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Background overlay texture"
+msgid "Restore the skin settings"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Browse custom image for background overlay"
+msgid "Restoring..."
 msgstr ""
 
 msgctxt "#32004"
-msgid "Custom single image"
+msgid "Your backup is succesfully restored!"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Custom multi image (folder)"
+msgid "Create new backup"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Select busy spinner"
+msgid "Restore"
 msgstr ""
 
 msgctxt "#32007"
-msgid "%s missing!"
+msgid "Manage skin backups"
 msgstr ""
 
 msgctxt "#32008"
-msgid "To get the most out of this skin, it is suggested to install a image resource addon for %s. \n Do you want to select and install this image resource addon now ?"
+msgid "Settings"
 msgstr ""
 
 msgctxt "#32009"
-msgid "Custom path"
+msgid "Select location to store skin backups"
 msgstr ""
 
 msgctxt "#32010"
-msgid "Select resource addon or custom folder"
+msgid "Please enter a name for the backup"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Not installed"
+msgid "Select skin backup file"
 msgstr ""
 
 msgctxt "#32012"
-msgid "Select view"
+msgid "Restoring..."
 msgstr ""
 
 msgctxt "#32013"
-msgid "Enable/disable views"
+msgid "Reset the skin to default settings"
 msgstr ""
 
 msgctxt "#32014"
-msgid "The action completed sucesfully"
+msgid "Are you sure you want to reset the skin to default settings ?"
 msgstr ""
 
 msgctxt "#32015"
-msgid "The action completed with errors"
+msgid "Backup"
 msgstr ""
 
 msgctxt "#32016"
-msgid "Do you want to setup a single background or a folder with multiple backgrounds ?"
+msgid "Default backup path"
 msgstr ""
 
 msgctxt "#32017"
-msgid "Single"
+msgid "Select busy spinner"
 msgstr ""
 
 msgctxt "#32018"
-msgid "Multiple"
+msgid "Select resource addon or custom folder"
 msgstr ""
 
 msgctxt "#32019"
-msgid "Random fanart from movie with genre"
+msgid "None"
 msgstr ""
 
 msgctxt "#32020"
-msgid "Select image"
+msgid "Custom path"
 msgstr ""
 
 msgctxt "#32021"
-msgid "Available image resource addons"
+msgid "Custom multi image (folder)"
 msgstr ""
 
 msgctxt "#32022"
-msgid "There are no (more) resource addons available for this type"
+msgid "Available image resource addons"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Artwork options"
+msgid "There are no (more) resource addons available for this type"
 msgstr ""
 
 msgctxt "#32024"
-msgid "Select Animated Art"
+msgid "%s missing!"
 msgstr ""
 
 msgctxt "#32025"
-msgid "Use submenu as widget"
+msgid "To get the most out of this skin, it is suggested to install a image resource addon for %s. \n Do you want to select and install this image resource addon now ?"
 msgstr ""
 
 msgctxt "#32026"
-msgid "RCB Most played games"
+msgid "Select image"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Custom single image"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Pick a color..."
+msgstr ""
+
+msgctxt "#32029"
+msgid "Color value"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Color Palette"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Custom color"
+msgstr ""
+
+msgctxt "#32032"
+msgid "None"
 msgstr ""

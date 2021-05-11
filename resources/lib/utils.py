@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os 
+import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
@@ -19,13 +20,15 @@ KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 ADDON_DATA = 'special://profile/addon_data/%s/' % ADDON_ID
 
+COLORFILES_PATH = xbmc.translatePath("special://profile/addon_data/%s/colors/" % ADDON_ID)
+SKINCOLORFILES_PATH = xbmc.translatePath("special://profile/addon_data/%s/colors/" % xbmc.getSkinDir())
+SKINCOLORFILE = xbmc.translatePath("special://skin/extras/colors/colors.xml")
 
 def log_msg(msg, loglevel=xbmc.LOGDEBUG):
     if sys.version_info.major < 3:
         if isinstance(msg, unicode):
             msg = msg.encode('utf-8')
     xbmc.log("Skin Utils --> %s" % msg, level=loglevel)
-
 
 def log_exception(modulename, exceptiondetails):
     if sys.version_info.major == 3:
@@ -35,7 +38,6 @@ def log_exception(modulename, exceptiondetails):
     else:
         log_msg(format_exc(sys.exc_info()), xbmc.LOGWARNING)
     log_msg("Exception in %s ! --> %s" % (modulename, exceptiondetails), xbmc.LOGERROR)
-
 
 def kodi_json(jsonmethod, params=None, returntype=None):
     kodi_json = {}
@@ -77,7 +79,6 @@ def kodi_json(jsonmethod, params=None, returntype=None):
         log_msg(kodi_json)
     return result
 
-
 def recursive_delete_dir(fullpath):
     success = True
     dirs, files = xbmcvfs.listdir(fullpath)
@@ -89,7 +90,6 @@ def recursive_delete_dir(fullpath):
         success = recursive_delete_dir(os.path.join(fullpath, directory))
     success = xbmcvfs.rmdir(fullpath)
     return success
-
 
 def copy_file(source, destination, do_wait=False):
     if xbmcvfs.exists(destination):
@@ -103,7 +103,6 @@ def copy_file(source, destination, do_wait=False):
                 break
             count -= 1
 
-
 def delete_file(filepath, do_wait=False):
     xbmcvfs.delete(filepath)
     if do_wait:
@@ -113,7 +112,6 @@ def delete_file(filepath, do_wait=False):
             if not xbmcvfs.exists(filepath):
                 break
             count -= 1
-
 
 def get_clean_image(image):
     if image and "image://" in image:
@@ -125,7 +123,6 @@ def get_clean_image(image):
         # filter out embedded covers
         image = ""
     return image
-
 
 def normalize_string(text):
     text = text.replace(":", "")
@@ -142,7 +139,6 @@ def normalize_string(text):
     text = text.strip()
     text = text.rstrip('.')
     return text
-
 
 def add_tozip(src, zip_file, abs_src):
     dirs, files = xbmcvfs.listdir(src)
@@ -162,14 +158,12 @@ def add_tozip(src, zip_file, abs_src):
         add_tozip(os.path.join(src, directory), zip_file, abs_src)
     return zip_file
 
-
 def zip_tofile(src, dst):
     import zipfile
     zip_file = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED)
     abs_src = os.path.abspath(xbmcvfs.translatePath(src))
     zip_file = add_tozip(src, zip_file, abs_src)
     zip_file.close()
-
 
 def unzip_fromfile(zip_path, dest_path):
     import shutil
@@ -202,7 +196,6 @@ def unzip_fromfile(zip_path, dest_path):
     zip_file.close()
     log_msg("UNZIP DONE of file %s  to path %s " % (zip_path, dest_path))
 
-
 def get_skin_name():
     skin_name = xbmc.getSkinDir()
     skin_name = skin_name.replace("skin.", "")
@@ -212,7 +205,6 @@ def get_skin_name():
     skin_name = skin_name.replace(".matrixbeta", "")
     return skin_name
 
-
 def try_encode(text, encoding="utf-8"):
     if sys.version_info.major == 3:
         return text
@@ -221,7 +213,6 @@ def try_encode(text, encoding="utf-8"):
             return text.encode(encoding, "ignore")
         except Exception:
             return text
-
 
 def try_decode(text, encoding="utf-8"):
     if sys.version_info.major == 3:
@@ -239,7 +230,6 @@ def urlencode(text):
         blah = urllib.urlencode({'blahblahblah': try_encode(text)})
     blah = blah[13:]
     return blah
-
 
 def get_current_content_type(containerprefix=""):
     content_type = ""
@@ -333,7 +323,6 @@ def get_current_content_type(containerprefix=""):
             content_type = "tvchannels"
     return content_type
 
-
 def recursive_delete_dir(path):
     success = True
     path = try_encode(path)
@@ -418,13 +407,11 @@ def merge_dict(dict_a, dict_b, allow_overwrite=False):
                 result[key] = value
     return result
 
-
 def clean_string(text):
     text = text.strip("'\"")
     text = text.strip()
     return text
-    
-    
+
 def getCondVisibility(text):
     # temporary solution: check if strings needs to be adjusted for backwards compatability
     if KODI_VERSION < 17:

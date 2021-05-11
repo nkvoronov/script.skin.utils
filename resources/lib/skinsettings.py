@@ -1,17 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, sys
+import os
+import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from resources.lib.utils import ADDON_ID, getCondVisibility, try_decode, try_encode
-from resources.lib.dialogselect import DialogSelect
-from xml.dom.minidom import parse
 import xml.etree.ElementTree as xmltree
 import time
+from xml.dom.minidom import parse
 
+from .utils import ADDON_ID, getCondVisibility, try_decode, try_encode
+from .dialogselect import DialogSelect
 
 class SkinSettings:
     params = {}
@@ -396,7 +397,7 @@ class SkinSettings:
                 curdir = cur_value_org.rsplit(delim, 1)[0] + delim
             else:
                 curdir = ""
-            value = try_decode(xbmcgui.Dialog().browse(0, self.addon.getLocalizedString(32005),
+            value = try_decode(xbmcgui.Dialog().browse(0, self.addon.getLocalizedString(32021),
                                         'files', '', True, True, curdir))
                                             
         return value
@@ -429,17 +430,17 @@ class SkinSettings:
     def select_image(self, skinstring, allow_multi=True, windowheader="", resource_addon="", current_value=""):
         images = []
         if not windowheader:
-            windowheader = self.addon.getLocalizedString(32020)
+            windowheader = self.addon.getLocalizedString(32026)
         if not current_value:
             current_value = try_decode(xbmc.getInfoLabel("Skin.String(%s.label)" % skinstring))
 
         # none option
-        images.append((self.addon.getLocalizedString(32001), "", "", "DefaultAddonNone.png"))
+        images.append((self.addon.getLocalizedString(32019), "", "", "DefaultAddonNone.png"))
         # custom single
-        images.append((self.addon.getLocalizedString(32004), "", "", "DefaultAddonPicture.png"))
+        images.append((self.addon.getLocalizedString(32027), "", "", "DefaultAddonPicture.png"))
         # custom multi
         if allow_multi:
-            images.append((self.addon.getLocalizedString(32005), "", "", "DefaultFolder.png"))
+            images.append((self.addon.getLocalizedString(32021), "", "", "DefaultFolder.png"))
 
         # backgrounds supplied in our special skinsettings.xml file
         skinimages = self.skinsettings
@@ -473,14 +474,14 @@ class SkinSettings:
                 return self.select_image(skinstring, allow_multi, windowheader, resource_addon, current_value)
         elif result:
             label = try_decode(result.getLabel())
-            if label == self.addon.getLocalizedString(32004):
+            if label == self.addon.getLocalizedString(32027):
                 # browse for single image
                 custom_image = SkinSettings().save_skin_image(skinstring, False, self.addon.getLocalizedString(32004))
                 if custom_image:
                     result.setPath(custom_image)
                 else:
                     return self.selectimage()
-            elif label == self.addon.getLocalizedString(32005):
+            elif label == self.addon.getLocalizedString(32021):
                 # browse for image path
                 custom_image = SkinSettings().save_skin_image(skinstring, True, self.addon.getLocalizedString(32005))
                 if custom_image:

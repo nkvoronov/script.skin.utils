@@ -1,6 +1,6 @@
 # Kodi language file
-# Addon Name: Skin Helper Service
-# Addon id: script.skin.helper.service
+# Addon Name: Skin Helper Utils
+# Addon id: script.skin.utils
 # Addon Provider: marcelveldt, YLLOW_DRAGON
 msgid ""
 msgstr ""
@@ -17,109 +17,133 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#32000"
-msgid "Custom Image"
-msgstr "Зображення користувача"
+msgid "Backup the skin settings"
+msgstr "Резервне копіювання налаштувань обкладинки"
 
 msgctxt "#32001"
-msgid "None"
-msgstr "Нема"
+msgid "Backupfile was succesfully created!"
+msgstr "Резервна копія була успішно створена!"
 
 msgctxt "#32002"
-msgid "Background overlay texture"
-msgstr "Фон накладення текстури"
+msgid "Restore the skin settings"
+msgstr "Відновлення налаштувань обкладинки"
 
 msgctxt "#32003"
-msgid "Browse custom image for background overlay"
-msgstr "Перегляд зображення користувача для фону накладення"
+msgid "Restoring..."
+msgstr "Відновлення..."
 
 msgctxt "#32004"
-msgid "Custom single image"
-msgstr "Одне зображення користувача"
+msgid "Your backup is succesfully restored!"
+msgstr "Ваша резервна копія успішно відновлена!"
 
 msgctxt "#32005"
-msgid "Custom multi image (folder)"
-msgstr "Кілька зображеннь користувача (папка)"
+msgid "Create new backup"
+msgstr "Створити нову резервну копію"
 
 msgctxt "#32006"
+msgid "Restore"
+msgstr "Відновлення"
+
+msgctxt "#32007"
+msgid "Manage skin backups"
+msgstr "Управління резервними копіями обкладинки"
+
+msgctxt "#32008"
+msgid "Settings"
+msgstr "Налаштування"
+
+msgctxt "#32009"
+msgid "Select location to store skin backups"
+msgstr "Виберіть папку для зберігання резервних копій обкладинки"
+
+msgctxt "#32010"
+msgid "Please enter a name for the backup"
+msgstr "Будь ласка, введіть ім'я для резервної копії"
+
+msgctxt "#32011"
+msgid "Select skin backup file"
+msgstr "Вибрати файл резервної копії"
+
+msgctxt "#32012"
+msgid "Restoring..."
+msgstr "Відновлення..."
+
+msgctxt "#32013"
+msgid "Reset the skin to default settings"
+msgstr "Скидання налаштувань обкладинки"
+
+msgctxt "#32014"
+msgid "Are you sure you want to reset the skin to default settings ?"
+msgstr "Ви впевнені, що хочете скинути налаштування обкладинки до значень за замовчуванням ?"
+
+msgctxt "#32015"
+msgid "Backup"
+msgstr "Резервная копия"
+
+msgctxt "#32016"
+msgid "Default backup path"
+msgstr "Шлях для резервного копіювання"
+
+msgctxt "#32017"
 msgid "Select busy spinner"
 msgstr "Вибрати індикатор зайнятості"
 
-msgctxt "#32007"
-msgid "%s missing!"
-msgstr "%s відсутня!"
-
-msgctxt "#32008"
-msgid "To get the most out of this skin, it is suggested to install a image resource addon for %s. \n Do you want to select and install this image resource addon now ?"
-msgstr "Для того, щоб отримати максимальну віддачу від цієї обкладинки, рекомендується встановити додаток ресурсу зображень для %s. \n Ви хочете, щоб вибрати і встановити це додаток ресурсу зображень зараз?"
-
-msgctxt "#32009"
-msgid "Custom path"
-msgstr "Шлях користувача"
-
-msgctxt "#32010"
+msgctxt "#32018"
 msgid "Select resource addon or custom folder"
 msgstr "Вибрати додаток ресурсу або папку користувача"
 
-msgctxt "#32011"
-msgid "Not installed"
-msgstr "Не встановлений"
-
-msgctxt "#32012"
-msgid "Select view"
-msgstr "Вибрати вид"
-
-msgctxt "#32013"
-msgid "Enable/disable views"
-msgstr "Дозволити/Заборонити види"
-
-msgctxt "#32014"
-msgid "The action completed sucesfully"
-msgstr "Дія успішна"
-
-msgctxt "#32015"
-msgid "The action completed with errors"
-msgstr "Дія завершено з помилками"
-
-msgctxt "#32016"
-msgid "Do you want to setup a single background or a folder with multiple backgrounds ?"
-msgstr "Ви хочете налаштувати один фон або папку з декількома фонами?"
-
-msgctxt "#32017"
-msgid "Single"
-msgstr "Одне"
-
-msgctxt "#32018"
-msgid "Multiple"
-msgstr "Кілька"
-
 msgctxt "#32019"
-msgid "Random fanart from movie with genre"
-msgstr "Випадкові фанарт з фільму с жанром"
+msgid "None"
+msgstr "Нема"
 
 msgctxt "#32020"
+msgid "Custom path"
+msgstr "Шлях користувача"
+
+msgctxt "#32021"
+msgid "Custom multi image (folder)"
+msgstr "Кілька зображеннь користувача (папка)"
+
+msgctxt "#32022"
+msgid "Available image resource addons"
+msgstr ""
+
+msgctxt "#32023"
+msgid "There are no (more) resource addons available for this type"
+msgstr "Нема (більше) доповнень ресурсів, доступних для даного типу"
+
+msgctxt "#32024"
+msgid "%s missing!"
+msgstr "%s відсутня!"
+
+msgctxt "#32025"
+msgid "To get the most out of this skin, it is suggested to install a image resource addon for %s. \n Do you want to select and install this image resource addon now ?"
+msgstr "Для того, щоб отримати максимальну віддачу від цієї обкладинки, рекомендується встановити додаток ресурсу зображень для %s. \n Ви хочете, щоб вибрати і встановити це додаток ресурсу зображень зараз ?"
+
+msgctxt "#32026"
 msgid "Select image"
 msgstr "Вибрати зображення"
 
-msgctxt "#32021"
-msgid "Available image resource addons"
-msgstr "Доступні доповнення ресурсів зображень"
+msgctxt "#32027"
+msgid "Custom single image"
+msgstr "Одне зображення користувача"
 
-msgctxt "#32022"
-msgid "There are no (more) resource addons available for this type"
-msgstr "Там нема (більше) доповнень ресурсів, доступних для даного типу"
+msgctxt "#32028"
+msgid "Pick a color..."
+msgstr "Выбрать цвет..."
 
-msgctxt "#32023"
-msgid "Artwork options"
-msgstr "Параметри ілюстрацій"
+msgctxt "#32029"
+msgid "Color value"
+msgstr "Цвет"
 
-msgctxt "#32024"
-msgid "Select Animated Art"
-msgstr "Вибрати анімовану ілюстрацію"
+msgctxt "#32030"
+msgid "Color Palette"
+msgstr "Цветовая палитра"
 
-msgctxt "#32025"
-msgid "Use submenu as widget"
-msgstr "Використовувати підміню як віджет"
+msgctxt "#32031"
+msgid "Custom color"
+msgstr "Выбранный цвет"
 
-msgctxt "#32026"
-msgid "RCB Most played games"
-msgstr "RCB найпопулярніші ігри"
+msgctxt "#32032"
+msgid "None"
+msgstr "Нет"
