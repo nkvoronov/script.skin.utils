@@ -147,3 +147,31 @@ msgstr ""
 msgctxt "#32032"
 msgid "None"
 msgstr ""
+
+msgctxt "#32033"
+msgid "Opacity"
+msgstr ""
+
+msgctxt "#32034"
+msgid "TV Channels"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Radio Channels"
+msgstr ""
+
+msgctxt "#32036"
+msgid "No"
+msgstr ""
+
+msgctxt "#32037"
+msgid "(Clear the current setting)"
+msgstr ""
+
+msgctxt "#32038"
+msgid "TV"
+msgstr ""
+
+msgctxt "#32039"
+msgid "Radio"
+msgstr ""

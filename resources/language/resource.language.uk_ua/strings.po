@@ -130,20 +130,48 @@ msgstr "Одне зображення користувача"
 
 msgctxt "#32028"
 msgid "Pick a color..."
-msgstr "Выбрать цвет..."
+msgstr "Вибрати колір..."
 
 msgctxt "#32029"
 msgid "Color value"
-msgstr "Цвет"
+msgstr "Колір"
 
 msgctxt "#32030"
 msgid "Color Palette"
-msgstr "Цветовая палитра"
+msgstr "Палітра кольорів"
 
 msgctxt "#32031"
 msgid "Custom color"
-msgstr "Выбранный цвет"
+msgstr "Вибраний колір"
 
 msgctxt "#32032"
 msgid "None"
-msgstr "Нет"
+msgstr "Ні"
+
+msgctxt "#32033"
+msgid "Opacity"
+msgstr "Прозорість"
+
+msgctxt "#32034"
+msgid "TV Channels"
+msgstr "ТБ канали"
+
+msgctxt "#32035"
+msgid "Radio Channels"
+msgstr "Радіо канали"
+
+msgctxt "#32036"
+msgid "No"
+msgstr "Нема"
+
+msgctxt "#32037"
+msgid "(Clear the current setting)"
+msgstr "(Очистити поточні настройки)"
+
+msgctxt "#32038"
+msgid "TV"
+msgstr "ТБ"
+
+msgctxt "#32039"
+msgid "Radio"
+msgstr "Радіо"

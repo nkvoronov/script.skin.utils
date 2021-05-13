@@ -147,3 +147,31 @@ msgstr "Выбранный цвет"
 msgctxt "#32032"
 msgid "None"
 msgstr "Нет"
+
+msgctxt "#32033"
+msgid "Opacity"
+msgstr "Прозрачность"
+
+msgctxt "#32034"
+msgid "TV Channels"
+msgstr "ТВ каналы"
+
+msgctxt "#32035"
+msgid "Radio Channels"
+msgstr "Радио каналы"
+
+msgctxt "#32036"
+msgid "No"
+msgstr "Нет"
+
+msgctxt "#32037"
+msgid "(Clear the current setting)"
+msgstr "(Очистить текущие настройки)"
+
+msgctxt "#32038"
+msgid "TV"
+msgstr "ТВ"
+
+msgctxt "#32039"
+msgid "Radio"
+msgstr "Радио"
