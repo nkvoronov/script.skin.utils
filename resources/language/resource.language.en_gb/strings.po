@@ -92,16 +92,12 @@ msgctxt "#32018"
 msgid "Select resource addon or custom folder"
 msgstr ""
 
-msgctxt "#32019"
-msgid "None"
-msgstr ""
-
 msgctxt "#32020"
 msgid "Custom path"
 msgstr ""
 
 msgctxt "#32021"
-msgid "Custom multi image (folder)"
+msgid "Custom multi image"
 msgstr ""
 
 msgctxt "#32022"
@@ -158,14 +154,6 @@ msgstr ""
 
 msgctxt "#32035"
 msgid "Radio Channels"
-msgstr ""
-
-msgctxt "#32036"
-msgid "No"
-msgstr ""
-
-msgctxt "#32037"
-msgid "(Clear the current setting)"
 msgstr ""
 
 msgctxt "#32038"

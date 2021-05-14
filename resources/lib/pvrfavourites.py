@@ -49,25 +49,25 @@ class PVRFavourites:
         if self.typepvr == '0':
             header = self.addon.getLocalizedString(32034)
         else:
-            header = self.addon.getLocalizedString(32035)            
+            header = self.addon.getLocalizedString(32035)
         channelslist = self.getchannelslist()
-        listitem = xbmcgui.ListItem(self.addon.getLocalizedString(32036),self.addon.getLocalizedString(32037))
+        listitem = xbmcgui.ListItem(xbmc.getLocalizedString(231),xbmc.getLocalizedString(24040))
         listitem.setArt({'icon':'DefaultAddonNone.png'})
         listitem.setProperty('channelid', '0')
         channelslist.insert(0, listitem)
         num = xbmcgui.Dialog().select(header, channelslist, useDetails=True)
         if num == 0:
-            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.Label'))
-            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.Icon'))
-            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.ChannelId'))
+            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.label'))
+            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.icon'))
+            xbmc.executebuiltin('Skin.Reset(%s)' % (self.skinstring + '.channelid'))
         elif num > 0:
             item = channelslist[num]
             name = item.getLabel()
             icon = item.getArt('thumb')
             channelid = item.getProperty('channelid')
-            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.Label'), name))
-            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.Icon'), icon))
-            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.ChannelId'), channelid))
+            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.label'), name))
+            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.icon'), icon))
+            xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.channelid'), channelid))
         
     def update(self):
         result = kodijson('PVR.GetChannelDetails', {"channelid": self.channelid, "properties" : [ "broadcastnow" ]})

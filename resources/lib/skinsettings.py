@@ -374,14 +374,14 @@ class SkinSettings:
         if skinconstants:
             self.updateskinconstants(skinconstants)
 
-    def saveskinimage(self, skinstring='', multi_image=False, header=''):
+    def saveskinimage(self, skinstring='', multi_image=False, header='', allow_copy=False):
         cur_value = trydecode(xbmc.getInfoLabel('Skin.String(%s)' % skinstring))
         cur_value_org = trydecode(xbmc.getInfoLabel('Skin.String(%s.org)' % skinstring))
 
         if not multi_image:
             # single image (allow copy to addon_data)
             value = trydecode(xbmcgui.Dialog().browse(2, header, 'files', '', True, True, cur_value_org))
-            if value:
+            if value and allow_copy:
                 ext = value.split('.')[-1]
                 newfile = ('special://profile/addon_data/%s/custom_images/%s.%s'
                            % (xbmc.getSkinDir(), skinstring + time.strftime('%Y%m%d%H%M%S', time.gmtime()), ext))
@@ -397,8 +397,7 @@ class SkinSettings:
                 curdir = cur_value_org.rsplit(delim, 1)[0] + delim
             else:
                 curdir = ''
-            value = trydecode(xbmcgui.Dialog().browse(0, self.addon.getLocalizedString(32021),
-                                        'files', '', True, True, curdir))
+            value = trydecode(xbmcgui.Dialog().browse(0, header, 'files', '', True, True, curdir))
                                             
         return value
 
@@ -435,12 +434,12 @@ class SkinSettings:
             current_value = trydecode(xbmc.getInfoLabel('Skin.String(%s.label)' % skinstring))
 
         # none option
-        images.append((self.addon.getLocalizedString(32036), '', self.addon.getLocalizedString(32037), 'DefaultAddonNone.png'))
+        images.append((xbmc.getLocalizedString(231), '', xbmc.getLocalizedString(24040), 'DefaultAddonNone.png'))
         # custom single
-        images.append((self.addon.getLocalizedString(32027), '', '', 'DefaultAddonPicture.png'))
+        images.append((xbmc.getLocalizedString(561), '', self.addon.getLocalizedString(32027), 'DefaultFile.png'))
         # custom multi
         if allow_multi:
-            images.append((self.addon.getLocalizedString(32021), '', '', 'DefaultFolder.png'))
+            images.append((xbmc.getLocalizedString(19076), '', self.addon.getLocalizedString(32021), 'DefaultFolder.png'))
 
         # backgrounds supplied in our special skinsettings.xml file
         skinimages = self.skinsettings
@@ -474,16 +473,16 @@ class SkinSettings:
                 return self.selectimage(skinstring, allow_multi, windowheader, resource_addon, current_value)
         elif result:
             label = trydecode(result.getLabel())
-            if label == self.addon.getLocalizedString(32027):
+            if label == xbmc.getLocalizedString(561):
                 # browse for single image
-                custom_image = SkinSettings().saveskinimage(skinstring, False, self.addon.getLocalizedString(32004))
+                custom_image = SkinSettings().saveskinimage(skinstring, False, self.addon.getLocalizedString(32027))
                 if custom_image:
                     result.setPath(custom_image)
                 else:
                     return self.selectimage()
-            elif label == self.addon.getLocalizedString(32021):
+            elif label == xbmc.getLocalizedString(19076):
                 # browse for image path
-                custom_image = SkinSettings().saveskinimage(skinstring, True, self.addon.getLocalizedString(32005))
+                custom_image = SkinSettings().saveskinimage(skinstring, True, self.addon.getLocalizedString(32021))
                 if custom_image:
                     result.setPath(custom_image)
                 else:

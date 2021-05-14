@@ -23,14 +23,14 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
         header = addon.getLocalizedString(32018)
 
     # none option
-    listitem = xbmcgui.ListItem(addon.getLocalizedString(32036),addon.getLocalizedString(32037))
+    listitem = xbmcgui.ListItem(xbmc.getLocalizedString(231),xbmc.getLocalizedString(24040))
     listitem.setArt({'icon': 'DefaultAddonNone.png'})
     listitem.setProperty('addonid', 'none')
     listing.append(listitem)
 
     # custom path
     if custom:
-        listitem = xbmcgui.ListItem(label=addon.getLocalizedString(32020))
+        listitem = xbmcgui.ListItem(label=xbmc.getLocalizedString(19076),label2=addon.getLocalizedString(32020))
         listitem.setArt({'icon': 'DefaultFolder.png'})
         listitem.setProperty('addonid', 'custom')
         listing.append(listitem)
@@ -43,8 +43,7 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
         path = item['path']
         summary = item['summary']
         author = item['author']
-        label2 = '%s: %s' % (xbmc.getLocalizedString(21863), item['author'])
-        listitem = xbmcgui.ListItem(label=name, label2=label2)
+        listitem = xbmcgui.ListItem(label=name, label2=summary)
         listitem.setArt({'icon':'DefaultAddonImages.png', 'thumb':icon})
         listitem.setProperty('addonid', addonid)
         listitem.setProperty('author', author)

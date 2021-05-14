@@ -124,7 +124,6 @@ class MainModule:
     def setbusytexture(self):
         skinsettings = SkinSettings()
         skinstring = cleanstring(self.params.get('skinstring', 'SkinUtils.SpinnerTexture'))
-        skinshortcutsprop = cleanstring(self.params.get('skinshortcutsproperty', ''))
         current_value = cleanstring(self.params.get('currentvalue', ''))
         resource_addon = cleanstring(self.params.get('resourceaddon', 'resource.images.busyspinners'))
         allow_multi = self.params.get('allowmulti', 'true') == 'true'
@@ -132,12 +131,6 @@ class MainModule:
         label, value = skinsettings.selectimage(
             skinstring, allow_multi=allow_multi, windowheader=windowheader, resource_addon=resource_addon, current_value=current_value)
         if label:
-            #if skinshortcutsprop:
-                # write value to skinshortcuts prop
-                #from .skinshortcuts import set_skinshortcuts_property
-                #set_skinshortcuts_property(skinshortcutsprop, value, label)
-            #else:
-            # write the values to skin strings
             if value.startswith('$INFO'):
                 # we got an dynamic image from window property
                 skinsettings.setskinvariable(skinstring, value)
@@ -146,6 +139,17 @@ class MainModule:
             xbmc.executebuiltin('Skin.SetString(%s.name,%s)' % (skinstring, label))
             xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, value))
             xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, value))
+        del skinsettings
+        
+    def setbackground(self):
+        skinsettings = SkinSettings()
+        skinstring = cleanstring(self.params.get('skinstring', ''))
+        allow_multi = self.params.get('allowmulti', 'true') == 'true'
+        windowheader = cleanstring(self.params.get('header', xbmc.getLocalizedString(33069)))
+        label, value = skinsettings.selectimage(
+            skinstring, allow_multi=allow_multi, windowheader=windowheader, resource_addon='', current_value='')
+        if label:
+            xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, value))
         del skinsettings
 
     def selectchannel(self):

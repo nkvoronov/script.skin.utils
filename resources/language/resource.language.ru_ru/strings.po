@@ -92,17 +92,13 @@ msgctxt "#32018"
 msgid "Select resource addon or custom folder"
 msgstr "Выбрать дополнение ресурса или пользовательскую папку"
 
-msgctxt "#32019"
-msgid "None"
-msgstr "Нет"
-
 msgctxt "#32020"
 msgid "Custom path"
 msgstr "Пользовательский путь"
 
 msgctxt "#32021"
-msgid "Custom multi image (folder)"
-msgstr "Несколько пользовательских изображений (папка)"
+msgid "Custom multi image"
+msgstr "Несколько пользовательских изображений"
 
 msgctxt "#32022"
 msgid "Available image resource addons"
@@ -159,14 +155,6 @@ msgstr "ТВ каналы"
 msgctxt "#32035"
 msgid "Radio Channels"
 msgstr "Радио каналы"
-
-msgctxt "#32036"
-msgid "No"
-msgstr "Нет"
-
-msgctxt "#32037"
-msgid "(Clear the current setting)"
-msgstr "(Очистить текущие настройки)"
 
 msgctxt "#32038"
 msgid "TV"
