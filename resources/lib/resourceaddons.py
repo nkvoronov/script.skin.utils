@@ -46,6 +46,7 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
         listitem = xbmcgui.ListItem(label=name, label2=summary)
         listitem.setArt({'icon':'DefaultAddonImages.png', 'thumb':icon})
         listitem.setProperty('addonid', addonid)
+        listitem.setProperty('path', path)
         listitem.setProperty('author', author)
         listitem.setProperty('Addon.Summary', summary)
         listing.append(listitem)
@@ -87,7 +88,7 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
                 custom_path = dialog.browse(0, addon.getLocalizedString(32021), 'files')
                 del dialog
                 result.setPath(custom_path)
-            addonpath = result.getLabel()
+            addonpath = result.getProperty('path')
             if addonpath:
                 is_multi, extension = getmultiextension(addonpath)
                 xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, addonpath))
