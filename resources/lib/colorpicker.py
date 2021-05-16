@@ -12,7 +12,7 @@ from traceback import format_exc
 from contextlib import contextmanager
 from xml.dom.minidom import parse
 
-from .utils import ADDON_ID, COLORFILES_PATH, SKINCOLORFILES_PATH, SKINCOLORFILE, setlog, setlogexception
+from .utils import ADDON_ID, COLORFILES_PATH, SKINCOLORFILES_PATH, SKINCOLORFILE, SKINCOLOR_PATH, setlog, setlogexception
 
 SUPPORTS_PIL = False
 PYTHON3 = True if sys.version_info.major == 3 else False
@@ -63,6 +63,7 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
     colors_file = None
     all_colors = {}
     all_palettes = []
+    colors_def_list = {}
     active_palette = None
     default_color = None
 
@@ -72,6 +73,7 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
         self.win = xbmcgui.Window(10000)
         self.action_exitkeys_id = [10, 13]
         self.buildcolorslist()
+        self.loadcolorsskin()
         self.result = -1
 
         # check paths
@@ -128,6 +130,32 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
             return
         for item in self.all_colors[palette_name]:
             self.addcolortolist(item[0], item[1])
+            
+    def loadcolorsskin(self):
+        colors_def_file = os.path.join(SKINCOLOR_PATH, 'defaults.xml')
+        if xbmcvfs.exists(colors_def_file):
+            xmldoc = parse(colors_def_file)
+            items = xmldoc.documentElement.getElementsByTagName('color')
+            if items: 
+                for elem in items:
+                    name = elem.attributes['name'].nodeValue.lower()
+                    colorstring = elem.childNodes[0].nodeValue.lower()
+                    if name not in self.colors_def_list:
+                            self.colors_def_list[name] = colorstring
+        current_theme_name = xbmc.getInfoLabel('Skin.CurrentColourTheme')
+        setlog(current_theme_name)
+        if current_theme_name != 'SKINDEFAULT':
+            colors_def_file = os.path.join(SKINCOLOR_PATH, current_theme_name + '.xml')
+            if xbmcvfs.exists(colors_def_file):
+                xmldoc = parse(colors_def_file)
+                items = xmldoc.documentElement.getElementsByTagName('color')
+                if items:
+                    for elem in items:
+                        name = elem.attributes['name'].nodeValue.lower()
+                        colorstring = elem.childNodes[0].nodeValue.lower()
+                        self.colors_def_list[name] = colorstring
+                        
+        setlog(self.colors_def_list)
 
     def onInit(self):
         with busy_dialog():
@@ -144,13 +172,14 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
             curvalue_name = ''
             if self.skinstring:
                 curvalue = xbmc.getInfoLabel('Skin.String(%s)' % self.skinstring)
+                if curvalue == '' and self.default_color:
+                    curvalue = self.colors_def_list[self.default_color]
                 curvalue_name = xbmc.getInfoLabel('Skin.String(%s.name)' % self.skinstring)
-                if curvalue == '' or curvalue == 'None':
-                    curvalue = self.default_color
-                    curvalue_name = 'Default'
+                if curvalue_name == '' and self.default_color:
+                    curvalue_name = self.default_color                
             if self.win_property:
                 curvalue = self.win.getProperty(self.win_property)
-                curvalue_name = xbmc.getInfoLabel('%s.name)' % self.win_property)
+                curvalue_name = xbmc.getInfoLabel('%s.name' % self.win_property)
             if curvalue:
                 self.current_window.setProperty('colorstring', curvalue)
                 if curvalue != curvalue_name:
@@ -169,10 +198,8 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
                 # no color setup so we just focus the colorslist
                 self.current_window.setFocusId(3110)
                 self.colors_list.selectItem(0)
-                self.current_window.setProperty('colorstring',
-                                                self.colors_list.getSelectedItem().getProperty('colorstring'))
-                self.current_window.setProperty('colorname',
-                                                self.colors_list.getSelectedItem().getLabel())
+                self.current_window.setProperty('colorstring', self.colors_list.getSelectedItem().getProperty('colorstring'))
+                self.current_window.setProperty('colorname', self.colors_list.getSelectedItem().getLabel())
 
             # set opacity slider
             if self.current_window.getProperty('colorstring'):
@@ -215,12 +242,23 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
         self.createcolorswatchimage(colorstring)
 
         if self.skinstring and (not colorstring or colorstring == 'None'):
-            xbmc.executebuiltin('Skin.SetString(%s.name, %s)' % (self.skinstring, self.addon.getLocalizedString(32032)))
-            xbmc.executebuiltin('Skin.SetString(%s, "None")' % self.skinstring)
+            if self.default_color:
+                namecolor = self.default_color
+            else:
+                namecolor = self.addon.getLocalizedString(32032)
+            xbmc.executebuiltin('Skin.SetString(%s.name, %s)' % (self.skinstring, namecolor))
+            
+            xbmc.executebuiltin('Skin.SetString(%s, "")' % self.skinstring)
+            
             xbmc.executebuiltin('Skin.Reset(%s.base)' % self.skinstring)
 
         elif self.skinstring and colorstring:
-            xbmc.executebuiltin('Skin.SetString(%s.name, %s)' % (self.skinstring, colorname))
+            if self.default_color:
+                namecolor = self.default_color
+            else:
+                namecolor = colorname            
+            xbmc.executebuiltin('Skin.SetString(%s.name, %s)' % (self.skinstring, namecolor))
+            
             xbmc.executebuiltin('Skin.SetString(%s, %s)' % (self.skinstring, colorstring))
 
             colorbase = 'ff' + colorstring[2:]
@@ -238,8 +276,7 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
         elif controlID == 3020:
             # manual input
             dialog = xbmcgui.Dialog()
-            colorstring = dialog.input(self.addon.getLocalizedString(32029),
-                                       self.current_window.getProperty('colorstring'), type=xbmcgui.INPUT_ALPHANUM)
+            colorstring = dialog.input(self.addon.getLocalizedString(32029), self.current_window.getProperty('colorstring'), type=xbmcgui.INPUT_ALPHANUM)
             if colorstring == '':
                 colorstring = self.current_window.getProperty('colorstring')
             else:
@@ -275,7 +312,7 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
         elif controlID == 3060:
             # none button
             self.current_window.setProperty('colorstring', '')
-            self.savecolorsetting(restoreprevious=True)
+            self.savecolorsetting()
         elif controlID == 3110:    
             # color clicked
             item = self.colors_list.getSelectedItem()

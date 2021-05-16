@@ -123,7 +123,7 @@ class MainModule:
         
     def setbusytexture(self):
         skinsettings = SkinSettings()
-        skinstring = cleanstring(self.params.get('skinstring', 'SkinUtils.SpinnerTexture'))
+        skinstring = cleanstring(self.params.get('skinstring', 'skinutils.spinnertexture'))
         current_value = cleanstring(self.params.get('currentvalue', ''))
         resource_addon = cleanstring(self.params.get('resourceaddon', 'resource.images.busyspinners'))
         allow_multi = self.params.get('allowmulti', 'true') == 'true'
@@ -165,7 +165,7 @@ class MainModule:
         pvrfavourites.typepvr = cleanstring(self.params.get('typepvr','0'))
         pvrfavourites.skinstring = cleanstring(self.params.get('skinstring',''))
         pvrfavourites.channelid = cleanstring(self.params.get('channelid',''))
-        pvrfavourites.updatel()
+        pvrfavourites.update()
         setlog('updatechannel')
         del pvrfavourites
         

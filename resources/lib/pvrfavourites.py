@@ -8,8 +8,9 @@ import xbmcvfs
 import xbmcgui
 import xbmcaddon
 from operator import itemgetter
+from xml.dom.minidom import parse
 
-from .utils import ADDON_ID, setlog, kodijson
+from .utils import ADDON_ID, setlog, kodijson, getskinsettingsfile
 
 class PVRFavourites:
     typepvr = None
@@ -23,13 +24,13 @@ class PVRFavourites:
     def __del__(self):
         del self.win
         del self.addon
-        
+
     def getchannelslist(self):
         listitems = []
         if self.typepvr == '0':
-            channels = kodijson('PVR.GetChannels', {"channelgroupid": "alltv", "properties": [ "thumbnail", "channeltype", "hidden", "locked",  "lastplayed" ]})
+            channels = kodijson('PVR.GetChannels', {'channelgroupid': 'alltv', 'properties': [ 'thumbnail', 'channeltype', 'hidden', 'locked',  'lastplayed' ]})
         else:
-            channels = kodijson('PVR.GetChannels', {"channelgroupid": "allradio", "properties": [ "thumbnail", "channeltype", "hidden", "locked",  "lastplayed" ]})
+            channels = kodijson('PVR.GetChannels', {'channelgroupid': 'allradio', 'properties': [ 'thumbnail', 'channeltype', 'hidden', 'locked',  'lastplayed' ]})
         for item in sorted(channels, key=itemgetter('channelid')):            
             channelid = item['channelid']
             channeltype = item['channeltype']
@@ -39,7 +40,7 @@ class PVRFavourites:
                 channeltype = self.addon.getLocalizedString(32038)
             else:
                 channeltype = self.addon.getLocalizedString(32039)
-            listitem = xbmcgui.ListItem(label=name, label2=str(channelid) + ' (' + channeltype + ')')
+            listitem = xbmcgui.ListItem(label=name, label2=channeltype)
             listitem.setArt({'icon':'DefaultAddonImages.png', 'thumb':icon})
             listitem.setProperty('channelid', str(channelid))
             listitems.append(listitem)
@@ -49,7 +50,7 @@ class PVRFavourites:
         if self.typepvr == '0':
             header = self.addon.getLocalizedString(32034)
         else:
-            header = self.addon.getLocalizedString(32035)
+            header = self.addon.getLocalizedString(32035)            
         channelslist = self.getchannelslist()
         listitem = xbmcgui.ListItem(xbmc.getLocalizedString(231),xbmc.getLocalizedString(24040))
         listitem.setArt({'icon':'DefaultAddonNone.png'})
@@ -70,9 +71,32 @@ class PVRFavourites:
             xbmc.executebuiltin('Skin.SetString(%s,%s)' % ((self.skinstring + '.channelid'), channelid))
         
     def update(self):
-        result = kodijson('PVR.GetChannelDetails', {"channelid": self.channelid, "properties" : [ "broadcastnow" ]})
-        return result
+        try:
+            file = getskinsettingsfile()
+            settings_file = xbmcvfs.translatePath(file)
+            if xbmcvfs.exists(settings_file):
+                xmldoc = parse(settings_file)
+                items = xmldoc.documentElement.getElementsByTagName('setting')
+                if items: 
+                    for elem in items:
+                        name = elem.attributes['id'].nodeValue.lower()                    
+                        arr_names = name.split('.')
+                        try:
+                            channelid = elem.childNodes[0].nodeValue
+                        except:
+                            channelid = ''
+                        if name.startswith('channel') and name.endswith('.channelid') and channelid:
+                            title = ''
+                            channel_details = kodijson('PVR.GetChannelDetails', {'channelid': int(channelid), 'properties' : [ 'broadcastnow' ]}, 'channeldetails')
+                            if 'broadcastnow' in channel_details and channel_details['broadcastnow'] is not None:                            
+                                title = channel_details['broadcastnow']['title']
+                            self.win.setProperty(arr_names[0] + '.' + arr_names[1] + '.title' , title)                        
+        except Exception as e:
+            setlog('ERROR: (' + repr(e) + ')')        
         
     def play(self):
-        result = kodijson('Player.Open', {"item": { "channelid": self.channelid }})
-        return result
+        try:
+            result = kodijson('Player.Open', {'item': { 'channelid': int(self.channelid) }})
+            return result
+        except Exception as e:
+            setlog('ERROR: (' + repr(e) + ')')

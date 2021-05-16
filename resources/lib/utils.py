@@ -23,6 +23,7 @@ ADDON_DATA = 'special://profile/addon_data/%s/' % ADDON_ID
 COLORFILES_PATH = xbmc.translatePath('special://profile/addon_data/%s/colors/' % ADDON_ID)
 SKINCOLORFILES_PATH = xbmc.translatePath('special://profile/addon_data/%s/colors/' % xbmc.getSkinDir())
 SKINCOLORFILE = xbmc.translatePath('special://skin/extras/colors/colors.xml')
+SKINCOLOR_PATH = xbmc.translatePath('special://skin/colors/')
 
 def setlog(msg, loglevel=xbmc.LOGDEBUG):
     if sys.version_info.major < 3:
@@ -38,6 +39,9 @@ def setlogexception(modulename, exceptiondetails):
     else:
         setlog(format_exc(sys.exc_info()), xbmc.LOGWARNING)
     setlog('Exception in %s ! --> %s' % (modulename, exceptiondetails), xbmc.LOGERROR)
+    
+def getskinsettingsfile():
+    return xbmcvfs.translatePath('special://profile/addon_data/' + xbmc.getSkinDir() + '/settings.xml')
 
 def kodijson(jsonmethod, params=None, returntype=None):
     kodi_json = {}
