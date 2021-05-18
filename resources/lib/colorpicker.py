@@ -211,7 +211,8 @@ class ColorPicker(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action.getId() in (9, 10, 92, 216, 247, 257, 275, 61467, 61448, ):
             # exit or back called from kodi
-            self.savecolorsetting(restoreprevious=True)
+            self.current_window.setProperty('colorstring', '')
+            self.savecolorsetting()
             self.closedialog()
 
     def closedialog(self):

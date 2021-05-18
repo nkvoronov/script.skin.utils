@@ -135,9 +135,7 @@ class MainModule:
                 # we got an dynamic image from window property
                 skinsettings.setskinvariable(skinstring, value)
                 value = '$VAR[%s]' % skinstring
-            xbmc.executebuiltin('Skin.SetString(%s.label,%s)' % (skinstring, label))
             xbmc.executebuiltin('Skin.SetString(%s.name,%s)' % (skinstring, label))
-            xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, value))
             xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, value))
         del skinsettings
         

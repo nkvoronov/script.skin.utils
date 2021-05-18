@@ -9,6 +9,7 @@ import xbmcgui
 import xbmcaddon
 import re
 import urllib.request, urllib.error, urllib.parse
+from xml.dom.minidom import parseString
 
 from .utils import ADDON_ID, KODI_VERSION, setlogexception, kodijson, trydecode, getCondVisibility
 from .dialogselect import DialogSelect
@@ -43,11 +44,14 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
         path = item['path']
         summary = item['summary']
         author = item['author']
+        extension, subfolders = getmultiextension(path)
         listitem = xbmcgui.ListItem(label=name, label2=summary)
         listitem.setArt({'icon':'DefaultAddonImages.png', 'thumb':icon})
         listitem.setProperty('addonid', addonid)
         listitem.setProperty('path', path)
         listitem.setProperty('author', author)
+        listitem.setProperty('subfolders', subfolders)
+        listitem.setProperty('extension', extension)
         listitem.setProperty('Addon.Summary', summary)
         listing.append(listitem)
     
@@ -75,11 +79,9 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
             xbmc.executebuiltin('ActivateWindow(AddonBrowser, addons://repository.xbmc.org/kodi.resource.images/,return)')
         elif addon_id == 'none' and skinstring:
             # None
-            xbmc.executebuiltin('Skin.Reset(%s)' % skinstring)
-            xbmc.executebuiltin('Skin.Reset(%s.ext)' % skinstring)
-            xbmc.executebuiltin('Skin.SetString(%s.name,%s)' % (skinstring, addon_name))
-            xbmc.executebuiltin('Skin.SetString(%s.label,%s)' % (skinstring, addon_name))
+            xbmc.executebuiltin('Skin.Reset(%s.name)' % skinstring)
             xbmc.executebuiltin('Skin.Reset(%s.path)' % skinstring)
+            xbmc.executebuiltin('Skin.Reset(%s.ext)' % skinstring)
             xbmc.executebuiltin('Skin.Reset(%s.multi)' % skinstring)
         else:
             if addon_id == 'custom':
@@ -88,18 +90,18 @@ def setresourceaddon(addontype, skinstring='', header='', custom=False, morebutt
                 custom_path = dialog.browse(0, addon.getLocalizedString(32021), 'files')
                 del dialog
                 result.setPath(custom_path)
-            addonpath = result.getProperty('path')
+            extension = '.%s' % result.getProperty('extension')
+            subfolders = result.getProperty('subfolders')
+            addonpath = result.getLabel()
             if addonpath:
-                is_multi, extension = getmultiextension(addonpath)
-                xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, addonpath))
-                xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, addonpath))
                 xbmc.executebuiltin('Skin.SetString(%s.name,%s)' % (skinstring, addon_name))
-                xbmc.executebuiltin('Skin.SetString(%s.label,%s)' % (skinstring, addon_name))
-                xbmc.executebuiltin('Skin.SetString(%s.ext,%s)' % (skinstring, extension))
-                if is_multi:
-                    xbmc.executebuiltin('Skin.SetBool(%s.multi)' % skinstring)
+                xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, 'resource://%s/' % addon_id))
+                if subfolders == 'true':
+                    xbmc.executebuiltin('Skin.SetBool(%s.multi)' % (skinstring))
+                    xbmc.executebuiltin('Skin.Reset(%s.ext)' % (skinstring))
                 else:
-                    xbmc.executebuiltin('Skin.Reset(%s.multi)' % skinstring)
+                    xbmc.executebuiltin('Skin.Reset(%s.multi)' % (skinstring))
+                    xbmc.executebuiltin('Skin.SetString(%s.ext,%s)' % (skinstring, extension))
     del addon
 
 def downloadresourceaddons(addontype):
@@ -173,40 +175,42 @@ def checkresourceaddon(skinstring='', addontype=''):
         skinstring = params.get('skinstring')
     if addontype and skinstring:
         for item in getresourceaddons(addontype):
-            xbmc.executebuiltin('Skin.SetString(%s,%s)' % (skinstring, item['path']))
-            xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, item['path']))
             xbmc.executebuiltin('Skin.SetString(%s.name,%s)' % (skinstring, item['name']))
-            xbmc.executebuiltin('Skin.SetString(%s.label,%s)' % (skinstring, item['name']))
-            is_multi, extension = getmultiextension(item['path'])
-            if is_multi:
+            xbmc.executebuiltin('Skin.SetString(%s.path,%s)' % (skinstring, 'resource://%s/' % item['addonid']))
+            extension, subfolders = getmultiextension(item['path'])
+            if subfolders == 'true':
                 xbmc.executebuiltin('Skin.SetBool(%s.multi)' % (skinstring))
-            xbmc.executebuiltin('Skin.SetString(%s.ext,%s)' % (skinstring, extension))
+                xbmc.executebuiltin('Skin.Reset(%s.ext)' % (skinstring))
+            else:
+                xbmc.executebuiltin('Skin.Reset(%s.multi)' % (skinstring))
+                xbmc.executebuiltin('Skin.SetString(%s.ext,.%s)' % (skinstring, extension))
             return True
     return False
 
 def getresourceaddons(filterstr=''):
     result = []
     params = {'type': 'kodi.resource.images',
-              'properties': ['name', 'thumbnail', 'path', 'author', 'summary']}
+              'properties': ['name', 'summary', 'thumbnail', 'path', 'author']}
     for item in kodijson('Addons.GetAddons', params, 'addons'):
         if not filterstr or item['addonid'].lower().startswith(filterstr.lower()):
-            item['path'] = 'resource://%s/' % item['addonid']
             result.append(item)
-
     return result
-
-def getmultiextension(filepath):
-    is_multi = False
-    extension = ''
-    dirs, files = xbmcvfs.listdir(filepath)
-    if len(dirs) > 0:
-        is_multi = True
-    if not is_multi:
-        for item in files:
-            extension = '.' + item.split('.')[-1]
-            break
-    return (is_multi, extension)
-
+    
+def getmultiextension(path):
+    infoxml = os.path.join(path, 'info.xml')
+    try:
+        info = xbmcvfs.File(infoxml)
+        data = info.read()
+        info.close()
+        xmldata = parseString(data)
+        extension = xmldata.documentElement.getElementsByTagName('format')[0].childNodes[0].data
+        subfolders = xmldata.documentElement.getElementsByTagName('subfolders')[0].childNodes[0].data
+        setlog(extension)
+        setlog(subfolders)
+        return extension, subfolders 
+    except:
+        return 'png', 'false' 
+            
 def getreporesourceaddons(filterstr=''):
     result = []
     simplecache = SimpleCache()
