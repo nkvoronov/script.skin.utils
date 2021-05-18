@@ -205,8 +205,6 @@ def getmultiextension(path):
         xmldata = parseString(data)
         extension = xmldata.documentElement.getElementsByTagName('format')[0].childNodes[0].data
         subfolders = xmldata.documentElement.getElementsByTagName('subfolders')[0].childNodes[0].data
-        setlog(extension)
-        setlog(subfolders)
         return extension, subfolders 
     except:
         return 'png', 'false' 
