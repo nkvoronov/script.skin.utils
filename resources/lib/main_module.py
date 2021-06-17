@@ -17,6 +17,7 @@ from .backuprestore import BackupRestore
 from .resourceaddons import setresourceaddon
 from .colorpicker import ColorPicker, waitforskinshortcutswindow
 from .pvrfavourites import PVRFavourites
+from .winproperties import WinProperties
 
 class MainModule:
 
@@ -175,6 +176,12 @@ class MainModule:
         pvrfavourites.play()
         setlog('playchannel')
         del pvrfavourites
+        
+    def updateproperties(self):
+        winproperties = WinProperties()
+        winproperties.update()
+        setlog('updateproperties')
+        del winproperties
         
     def selectcolor(self):
         if self.params:

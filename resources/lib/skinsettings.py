@@ -15,7 +15,6 @@ from .utils import ADDON_ID, trydecode, tryencode, getCondVisibility
 from .dialogselect import DialogSelect
 
 class SkinSettings:
-    params = {}
     skinsettings = {}
 
     def __init__(self):
