@@ -231,7 +231,7 @@ class MainModule:
             backup_file = silent
         else:
             silent_backup = False
-            backup_file = backuprestore.get_backupfilename(promptfilename)
+            backup_file = backuprestore.getbackupfilename(promptfilename)
         backuprestore.backup(filters, backup_file, silent_backup)
         setlog('backup')
         del backuprestore
