@@ -233,7 +233,6 @@ class MainModule:
             silent_backup = False
             backup_file = backuprestore.getbackupfilename(promptfilename)
         backuprestore.backup(filters, backup_file, silent_backup)
-        setlog('backup')
         del backuprestore
         
     def restore(self):
@@ -246,7 +245,6 @@ class MainModule:
                 xbmc.LOGERROR)
             return
         backuprestore.restore(silent)
-        setlog('restore')
     
     def checkskinsettings(self):
         SkinSettings().correctskinsettings()

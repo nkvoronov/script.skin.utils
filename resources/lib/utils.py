@@ -20,10 +20,10 @@ KODI_VERSION = int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 ADDON_DATA = 'special://profile/addon_data/%s/' % ADDON_ID
 
-COLORFILES_PATH = xbmc.translatePath('special://profile/addon_data/%s/colors/' % ADDON_ID)
-SKINCOLORFILES_PATH = xbmc.translatePath('special://profile/addon_data/%s/colors/' % xbmc.getSkinDir())
-SKINCOLORFILE = xbmc.translatePath('special://skin/extras/colors/colors.xml')
-SKINCOLOR_PATH = xbmc.translatePath('special://skin/colors/')
+COLORFILES_PATH = xbmcvfs.translatePath('special://profile/addon_data/%s/colors/' % ADDON_ID)
+SKINCOLORFILES_PATH = xbmcvfs.translatePath('special://profile/addon_data/%s/colors/' % xbmc.getSkinDir())
+SKINCOLORFILE = xbmcvfs.translatePath('special://skin/extras/colors/colors.xml')
+SKINCOLOR_PATH = xbmcvfs.translatePath('special://skin/colors/')
 
 def setlog(msg, loglevel=xbmc.LOGDEBUG):
     if sys.version_info.major < 3:
@@ -96,12 +96,16 @@ def recursivedeletedir(fullpath):
     return success
 
 def copyfile(source, destination, do_wait=False):
+    setlog('copyfile')
+    setlog(source)
+    setlog(destination)
     if xbmcvfs.exists(destination):
         deletefile(destination)
     xbmcvfs.copy(source, destination)
     if do_wait:
-        count = 20
+        count = 100
         while count:
+            setlog(str(count))
             xbmc.sleep(500)  # this first sleep is intentional
             if xbmcvfs.exists(destination):
                 break
@@ -110,8 +114,9 @@ def copyfile(source, destination, do_wait=False):
 def deletefile(filepath, do_wait=False):
     xbmcvfs.delete(filepath)
     if do_wait:
-        count = 20
+        count = 100
         while count:
+            setlog(str(count))
             xbmc.sleep(500)  # this first sleep is intentional
             if not xbmcvfs.exists(filepath):
                 break
@@ -163,6 +168,7 @@ def addtozip(src, zip_file, abs_src):
     return zip_file
 
 def ziptofile(src, dst):
+    setlog('ziptofile')
     import zipfile
     zip_file = zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED)
     abs_src = os.path.abspath(xbmcvfs.translatePath(src))

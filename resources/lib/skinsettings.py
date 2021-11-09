@@ -31,7 +31,7 @@ class SkinSettings:
         if sys.version_info.major == 3:
             addonpath = trydecode(xbmcvfs.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
         else:
-            addonpath = trydecode(xbmc.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
+            addonpath = trydecode(xbmcvfs.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
         addon = xmltree.parse(addonpath)
         extensionpoints = addon.findall('extension')
         for extensionpoint in extensionpoints:
@@ -46,7 +46,7 @@ class SkinSettings:
                                     resolution.attrib.get('folder')),
                                 'script-skin_utils_service-includes.xml')))) #???
                     else:
-                        includes_file = trydecode(xbmc.translatePath(
+                        includes_file = trydecode(xbmcvfs.translatePath(
                             tryencode(os.path.join(
                                 'special://skin/',
                                 trydecode(
@@ -85,7 +85,7 @@ class SkinSettings:
         if sys.version_info.major == 3:
             addonpath = trydecode(xbmcvfs.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
         else:
-            addonpath = trydecode(xbmc.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
+            addonpath = trydecode(xbmcvfs.translatePath(tryencode(os.path.join('special://skin/', 'addon.xml'))))
 
         addon = xmltree.parse(addonpath)
         extensionpoints = addon.findall('extension')
@@ -101,7 +101,7 @@ class SkinSettings:
                                     resolution.attrib.get('folder')),
                                 'script-skin_utils_service-includes.xml')))) #???
                     else:
-                        includes_file = trydecode(xbmc.translatePath(
+                        includes_file = trydecode(xbmcvfs.translatePath(
                             tryencode(os.path.join(
                                 'special://skin/',
                                 trydecode(
@@ -164,7 +164,7 @@ class SkinSettings:
         if sys.version_info.major == 3:
             settings_file = trydecode(xbmcvfs.translatePath('special://skin/extras/skinsettings.xml'))
         else:
-            settings_file = trydecode(xbmc.translatePath('special://skin/extras/skinsettings.xml'))
+            settings_file = trydecode(xbmcvfs.translatePath('special://skin/extras/skinsettings.xml'))
         if xbmcvfs.exists(settings_file):
             doc = parse(settings_file)
             listing = doc.documentElement.getElementsByTagName('setting')

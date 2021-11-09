@@ -23,6 +23,9 @@ class BackupRestore:
         del self.addon
 
     def backup(self, filters=None, backup_file='', silent=False):
+        setlog('backup')
+        setlog(backup_file)
+        xbmc.executebuiltin('ActivateWindow(busydialognocancel)')
         if not filters:
             filters = []
 
@@ -31,7 +34,7 @@ class BackupRestore:
 
         # create temp path
         temp_path = self.createtemp()
-        zip_temp = '%s/skinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d %H.%M'))
+        zip_temp = '%sskinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d-%H-%M'))
         temp_path = temp_path + 'skinbackup/'
 
         # backup skinshortcuts preferences
@@ -51,15 +54,18 @@ class BackupRestore:
         copyfile(zip_temp, backup_file, True)
 
         # cleanup temp
-        recursivedeletedir(temp_path)
-        xbmcvfs.delete(zip_temp)
+        #recursivedeletedir(temp_path)
+        #xbmcvfs.delete(zip_temp)
+        xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
 
         # show success message
         if not silent:
             xbmcgui.Dialog().ok(self.addon.getLocalizedString(32000), self.addon.getLocalizedString(32001))
 
     def restore(self, filename='', silent=False):
-
+        setlog('backup')
+        setlog(filename)
+        xbmc.executebuiltin('ActivateWindow(busydialognocancel)')
         if not filename:
             filename = self.getrestorefilename()
 
@@ -100,6 +106,7 @@ class BackupRestore:
             # cleanup temp
             recursivedeletedir(temp_path)
             progressdialog.close()
+        xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
         if not silent:
             xbmcgui.Dialog().ok(self.addon.getLocalizedString(32002), self.addon.getLocalizedString(32004))
 
@@ -109,8 +116,8 @@ class BackupRestore:
         # create backup option
         label = self.addon.getLocalizedString(32005)
         listitem = xbmcgui.ListItem(label=label)
-        listitem.setArt({'icon': "DefaultFolder.png"})
-        listitem.setPath("backup")
+        listitem.setArt({'icon': 'DefaultFolder.png'})
+        listitem.setPath('backup')
         listitems.append(listitem)
 
         # list existing backups
@@ -118,10 +125,10 @@ class BackupRestore:
         if backuppath:
             for backupfile in xbmcvfs.listdir(backuppath)[1]:
                 backupfile = backupfile
-                if "Skinbackup" in backupfile and backupfile.endswith(".zip"):
-                    label = "%s: %s" % (self.addon.getLocalizedString(32006), backupfile)
+                if 'skinbackup' in backupfile and backupfile.endswith('.zip'):
+                    label = '%s: %s' % (self.addon.getLocalizedString(32006), backupfile)
                     listitem = xbmcgui.ListItem(label=label)
-                    listitem.setArt({'icon': "DefaultFile.png"})
+                    listitem.setArt({'icon': 'DefaultFile.png'})
                     listitem.setPath(backuppath + backupfile)
                     listitems.append(listitem)
 
@@ -136,9 +143,9 @@ class BackupRestore:
         if result:
             if isinstance(result, bool):
                 # show settings
-                xbmc.executebuiltin("Addon.OpenSettings(%s)" % ADDON_ID)
+                xbmc.executebuiltin('Addon.OpenSettings(%s)' % ADDON_ID)
             else:
-                if result.getfilename() == "backup":
+                if result.getfilename() == 'backup':
                     # create new backup
                     self.backup(backup_file=self.getbackupfilename())
                 else:
@@ -164,6 +171,7 @@ class BackupRestore:
                     copyfile(source, dest)
 
     def backupskinshortcuts(self, dest_path):
+        setlog('backupskinshortcuts')
         source_path = u'special://profile/addon_data/script.skinshortcuts/'
         if not xbmcvfs.exists(dest_path):
             xbmcvfs.mkdir(dest_path)
@@ -171,23 +179,25 @@ class BackupRestore:
             file = file
             sourcefile = source_path + file
             destfile = dest_path + file
+            if 'settings.xml' in file:
+                copyfile(sourcefile, destfile)
+                
             if xbmc.getCondVisibility('SubString(Skin.String(skinshortcuts-sharedmenu),false)'):
                 # User is not sharing menu, so strip the skin name out of the destination file
                 destfile = destfile.replace('%s.' % (xbmc.getSkinDir()), '')
-            if (file.endswith(".DATA.xml") and (not xbmc.getCondVisibility(
-                    'SubString(Skin.String(skinshortcuts-sharedmenu),false)') or file.startswith(xbmc.getSkinDir()))):
+ 
+            if (file.endswith('.DATA.xml') and (not xbmc.getCondVisibility('SubString(Skin.String(skinshortcuts-sharedmenu),false)') or file.startswith(xbmc.getSkinDir()))):
                 xbmcvfs.copy(sourcefile, destfile)
                 # parse shortcuts file and look for any images - if found copy them to addon folder
                 self.backupskinshortcutsimages(destfile, dest_path)
-
             elif file.endswith('.properties') and xbmc.getSkinDir() in file:
                 if xbmc.getSkinDir() in file:
                     destfile = dest_path + file.replace(xbmc.getSkinDir(), 'SKINPROPERTIES')
                     copyfile(sourcefile, destfile)
                     self.backupskinshortcutsproperties(destfile, dest_path)
-            else:
-                # just copy the remaining files
-                copyfile(sourcefile, destfile)
+            elif file.endswith('.hash') and xbmc.getSkinDir() in file:
+                if xbmc.getSkinDir() in file:
+                    copyfile(sourcefile, destfile)
 
     @staticmethod
     def backupskinshortcutsimages(shortcutfile, dest_path):
@@ -257,9 +267,9 @@ class BackupRestore:
         return backuppath
 
     def getbackupfilename(self, promptfilename=False):
-        backupfile = '%s Skinbackup (%s)' % (
-                getskinname().capitalize(),
-                datetime.now().strftime('%Y-%m-%d %H.%M.%S'))
+        backupfile = '%s-skinbackup-%s' % (
+                getskinname(),
+                datetime.now().strftime('%Y-%m-%d-%H-%M'))
         if promptfilename:
             header = self.addon.getLocalizedString(32010)
             backupfile = xbmcgui.Dialog().input(header, backupfile).decode
@@ -279,8 +289,7 @@ class BackupRestore:
         return temp_path
 
     def getrestorefilename(self):
-        filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32011),
-                                       'files')
+        filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32011), 'files')
         filename = filename.replace('//', '') # possible fix for strange path issue on atv/ftv ?
         return filename
 
@@ -396,7 +405,7 @@ class BackupRestore:
             max_backups = int(max_backups)
             all_files = []
             for filename in xbmcvfs.listdir(backuppath)[1]:
-                if ".zip" in filename and 'Skinbackup' in filename:
+                if ".zip" in filename and 'skinbackup' in filename:
                     filename = filename
                     filepath = backuppath + filename
                     filestat = xbmcvfs.Stat(filepath)
