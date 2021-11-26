@@ -186,7 +186,7 @@ class BackupRestore:
                 # User is not sharing menu, so strip the skin name out of the destination file
                 destfile = destfile.replace('%s.' % (xbmc.getSkinDir()), '')
  
-            if (file.endswith('.DATA.xml') and (not xbmc.getCondVisibility('SubString(Skin.String(skinshortcuts-sharedmenu),false)') or file.startswith(xbmc.getSkinDir()))):
+            if (file.endswith('.DATA.xml') and (not xbmc.getCondVisibility('SubString(Skin.String(skinshortcuts-sharedmenu),false)') and file.startswith(xbmc.getSkinDir()))):
                 xbmcvfs.copy(sourcefile, destfile)
                 # parse shortcuts file and look for any images - if found copy them to addon folder
                 self.backupskinshortcutsimages(destfile, dest_path)
